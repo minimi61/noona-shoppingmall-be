@@ -10,7 +10,7 @@ userController.createUser = async (req, res) => {
     if (user) {
       throw new Error("User already exist");
     }
-    const salt = await bcrypt.genSaltSync(10);
+    const salt = await bcrypt.genSalt(10);
     password = await bcrypt.hash(password, salt);
     const newUser = new User({
       email,
