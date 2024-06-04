@@ -14,7 +14,7 @@ const testmongoURI = process.env.LOCAL_DB_ADDRESS;
 const mongoURI = process.env.MONGODB_URI_PROD;
 
 mongoose
-  .connect(testmongoURI, { useNewUrlParser: true })
+  .connect(mongoURI, { useNewUrlParser: true })
   .then(() => console.log("연결됨"))
   .catch((err) => console.log("DB connection fail", err));
 
