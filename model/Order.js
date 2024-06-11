@@ -5,8 +5,8 @@ const Product = require("./Product");
 const Cart = require("./Cart");
 const orderSchema = Schema(
   {
-    shipTo: { type: String, required: true },
-    contact: { type: String, required: true },
+    shipTo: { type: Object, required: true },
+    contact: { type: Object, required: true },
     totalPrice: { type: Number, required: true },
     userId: { type: mongoose.ObjectId, ref: User },
     status: { type: String, default: "active" },
@@ -19,18 +19,19 @@ const orderSchema = Schema(
     ],
     orderNum: { type: String },
   },
-  { timeStams: true }
+  { timestamps: true }
 );
 
 orderSchema.method.toJSON = function () {
   const obj = this._doc;
   delete obj.__v;
-  delete obj.updateAt;
-  delete obj.createAt;
+  delete obj.updatedAt;
+  // delete obj.createAt;
   return obj;
 };
 
 orderSchema.post("save", async function () {
+  //오더가 save되면 무조건 내 카트찾아서 비워주기
   const cart = await Cart.findOne({ userId: this.userId });
   cart.items = [];
   await cart.save();

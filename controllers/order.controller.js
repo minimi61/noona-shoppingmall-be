@@ -1,5 +1,6 @@
 const orderController = {};
 const Order = require("../model/Order");
+const User = require("../model/User");
 const { randomStringGenerator } = require("../utils/randomStringGenerator");
 const productController = require("./product.controller");
 
@@ -24,14 +25,42 @@ orderController.createOrder = async (req, res) => {
     const newOrder = new Order({
       userId,
       totalPrice,
-      shipTo: String(shipTo), // shipTo를 문자열로 변환
-      contact: String(contact), // contact를 문자열로 변환
+      shipTo,
+      contact,
       items: orderList,
       orderNum: randomStringGenerator(),
     });
-    console.log("newOrder", newOrder);
     await newOrder.save();
     res.status(200).json({ status: "success", orderNum: newOrder.orderNum });
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
+  }
+};
+
+orderController.getOrder = async (req, res) => {
+  try {
+    const { userId } = req;
+    const response = await Order.find({ userId }).populate({
+      path: "items.productId",
+      model: "Product",
+    });
+    res.status(200).json({ status: "success", orderList: response });
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
+  }
+};
+
+orderController.getOrderList = async (req, res) => {
+  try {
+    const { userId } = req;
+    const user = await User.findById(userId);
+    const response = await Order.find({}).populate({
+      path: "items.productId",
+      model: "Product",
+    });
+    res
+      .status(200)
+      .json({ status: "success", orderList: response, user: user.email });
   } catch (error) {
     res.status(400).json({ status: "fail", error: error.message });
   }
