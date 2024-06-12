@@ -9,7 +9,7 @@ const orderSchema = Schema(
     contact: { type: Object, required: true },
     totalPrice: { type: Number, required: true },
     userId: { type: mongoose.ObjectId, ref: User },
-    status: { type: String, default: "active" },
+    status: { type: String, default: "preparing" },
     items: [
       {
         productId: { type: mongoose.ObjectId, ref: Product },
