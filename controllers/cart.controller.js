@@ -74,7 +74,7 @@ cartController.updateCart = async (req, res) => {
       path: "items",
       populate: {
         path: "productId",
-        model: "Cart",
+        model: "Product",
       },
     });
     const findCartIndex = cart.items.findIndex((item) => item._id.equals(id));
