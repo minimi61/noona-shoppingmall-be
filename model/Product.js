@@ -11,6 +11,7 @@ const productSchema = Schema(
     stock: { type: Object, required: true },
     status: { type: String, default: "active" },
     isDeleted: { type: Boolean, default: false },
+    tag: { type: String, required: true },
   },
   { timeStams: true }
 );
